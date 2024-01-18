@@ -18,6 +18,5 @@ class User (BaseModel):
 class ListToDo(BaseModel):
 	is_complete = models.BooleanField(default=False)
 	task = models.TextField(null=True, blank=True)
-	user = models.ForeignKey(User, blank=False, null=False)
+	user = models.ForeignKey(User, blank=False, null=False, on_delete=models.RESTRICT)
 	finish_date = models.DateTimeField(blank=True, null=True)
-
