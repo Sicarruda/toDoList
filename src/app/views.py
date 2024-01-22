@@ -57,7 +57,7 @@ class UserView(APIView):
 		authorized_user = User.objects.filter(user=user, password=password)
 		
 		if authorized_user:
-			return Response({'msg': "Login feito com sucesso", 'user': authorized_user}, status=status.HTTP_200_OK)
+			return Response({'msg': "Login feito com sucesso"}, status=status.HTTP_200_OK)
 		
 		else:
 			return Response({'msg': 'Usuário ou senha incorretos'}, status=status.HTTP_401_UNAUTHORIZED)
