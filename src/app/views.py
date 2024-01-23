@@ -14,11 +14,11 @@ class UserView(APIView):
 		"""
 			Cria cadastro de usuário e senha no banco
 				payload:
-				{
-					user: string
-					email: string
-					password: string
-				}
+					{
+						user: string obrigatorio
+						email: string opcional
+						password: string obrigatorio
+					}
 		"""
 		data = request.data
 		user = User()
@@ -46,10 +46,14 @@ class UserView(APIView):
 
 			return Response([{'msg': msg}], status=status.HTTP_403_FORBIDDEN)
 
-
 	def get(self,request):
 		"""
 			Retorna o usuário especifico para login
+			
+			query params:
+				user: string obrigatorio
+				password: string obrigatorio
+
 		"""
 		user = request.GET.get('user')
 		password = request.GET.get('password')
@@ -61,3 +65,41 @@ class UserView(APIView):
 		
 		else:
 			return Response({'msg': 'Usuário ou senha incorretos'}, status=status.HTTP_401_UNAUTHORIZED)
+
+	def put (self, request):
+		"""
+			Altera os dados do usuário: senha e email
+
+			payload:
+				{
+					user_id : int obrigatorio
+					email: string opcional
+					password: string opcional
+				}
+
+		"""	
+
+		try:
+
+			data = request.data
+		
+			change_user = User.objects.get(id=data['user_id'])
+			
+			if data['email']:
+				change_user.email = data['email']
+
+			if data['password']:
+				change_user.password = data['password']
+			
+			change_user.save()
+
+			return Response({"msg": "Usuário alterado com sucesso"}, status=status.HTTP_200_OK)
+			
+		except Exception as error:
+			logging.exception(str(error))
+			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class TasksViews(APIView):
+	def post(self, request):
+		pass
