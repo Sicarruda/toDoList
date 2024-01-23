@@ -100,6 +100,23 @@ class UserView(APIView):
 			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class TasksViews(APIView):
+class TaskViews(APIView):
 	def post(self, request):
-		pass
+		data = request.data
+		task = ListToDo()
+
+		try:
+			user = User.objects.get(id=data["user_id"])
+
+			if not user:
+				return Response([{'msg': "Usuário não encontrado"}], status=status.HTTP_403_FORBIDDEN)
+
+			task.task = data['task']
+			task.user = user
+
+			task.save()
+			return Response({"msg": "Task criada com sucesso"}, status=status.HTTP_200_OK)
+
+		except Exception as error:
+			logging.exception(str(error))
+			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
