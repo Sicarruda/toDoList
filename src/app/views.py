@@ -34,17 +34,14 @@ class UserView(APIView):
 
 				user.save()
 
-				return Response({"msg": "Usuário criado com sucesso"}, status=status.HTTP_200_OK)
+				return Response({"msg": "Usuário criado com sucesso"}, status=status.HTTP_201_CREATED)
 			
 			else:
 				return Response({"msg": "Email ou usuário já existem"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		except IntegrityError as error:
-			msg = "Email já cadastrado"
-			logging.error(msg)
-			logging.error({error})
-
-			return Response([{'msg': msg}], status=status.HTTP_403_FORBIDDEN)
+			logging.exception(str(error))
+			return Response([{'msg': 'Email já cadastrado'}], status=status.HTTP_403_FORBIDDEN)
 
 	def get(self,request):
 		"""
@@ -115,8 +112,27 @@ class TaskViews(APIView):
 			task.user = user
 
 			task.save()
-			return Response({"msg": "Task criada com sucesso"}, status=status.HTTP_200_OK)
+			return Response({"msg": "Task criada com sucesso"}, status=status.HTTP_201_CREATED)
 
 		except Exception as error:
 			logging.exception(str(error))
 			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+	def get(self, request):
+		
+		try:
+			user_id = request.GET.get('user_id')
+
+			user = User.objects.get(id=user_id)
+
+			if not user_id and user_id:
+				return Response({"msg": "Usuario não encontrado"}, status=status.HTTP_400_BAD_REQUEST)
+
+			user_tasks = ListToDo.objects.filter(user = user, deleted=False).values()
+
+			return Response({'msg':'Lista de tarefas obtida com sucesso', 'tasks': user_tasks}, status=status.HTTP_200_OK)
+		
+		except Exception as error:
+			logging.exception(str(error))
+			return Response([{'msg': 'Erro ao buscar tarefas'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
