@@ -53,12 +53,13 @@ class UserView(APIView):
 
 		"""
 		user = request.GET.get('user')
+		# To Do: retirar da url a senha do usuário 
 		password = request.GET.get('password')
 		
-		authorized_user = User.objects.filter(user=user, password=password)
+		authorized_user = User.objects.filter(user=user, password=password).values()
 		
 		if authorized_user:
-			return Response({'msg': "Login feito com sucesso"}, status=status.HTTP_200_OK)
+			return Response({'msg': "Login feito com sucesso", "user": authorized_user}, status=status.HTTP_200_OK)
 		
 		else:
 			return Response({'msg': 'Usuário ou senha incorretos'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -135,4 +136,27 @@ class TaskViews(APIView):
 		except Exception as error:
 			logging.exception(str(error))
 			return Response([{'msg': 'Erro ao buscar tarefas'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+	def put(self, request):
+		try:
+			data = request.data
+			
+			task = ListToDo.objects.get(id=data["task_id"])
+
+			if data["is_complete"]:
+				task.is_complete = data["is_complete"]
+			
+			if data["task"]:
+				task.task = data["task"]
+
+			if data["deleted"]:
+				task.deleted = data["deleted"]
+
+			task.save()
+
+			return Response([{"msg": "Tarefa alterada com sucesso"}], status=status.HTTP_200_OK )
+	
+		except Exception as error:
+			logging.exception(str(error))
+			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
