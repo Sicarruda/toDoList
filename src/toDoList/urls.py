@@ -24,4 +24,7 @@ urlpatterns = [
     path('login/add-user/', UserView.as_view()),
     path('login/', UserView.as_view()),
     path('login/edit/', UserView.as_view()),
+    path('task/add-task/', TaskViews.as_view()),
+    path('task/', TaskViews.as_view()),
+    path('task/edit/', TaskViews.as_view()),
 ]
