@@ -21,10 +21,11 @@ from app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/add-user/', UserView.as_view()),
-    path('login/', UserView.as_view()),
-    path('login/edit/', UserView.as_view()),
+    path('user/add-user/', UserView.as_view()),
+    path('user/', UserView.as_view()),
+    path('user/edit/', UserView.as_view()),
     path('task/add-task/', TaskViews.as_view()),
     path('task/', TaskViews.as_view()),
     path('task/edit/', TaskViews.as_view()),
+    path('login/', loginView.as_view(),)
 ]
