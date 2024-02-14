@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.hashers import make_password
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -13,8 +13,13 @@ class BaseModel(models.Model):
 class User(BaseModel):
     user = models.CharField(max_length=50, blank=False, null=False)
     email = models.EmailField(blank=False, unique=True)
-    password = models.CharField(max_length=50, blank=False, null=False)
+    password = models.CharField(max_length=128, blank=False, null=False)
 
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return raw_password and make_password(raw_password) == self.password
 
 class ListToDo(BaseModel):
     is_complete = models.BooleanField(default=False)
