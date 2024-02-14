@@ -199,7 +199,7 @@ class loginView(APIView):
 			authorized_user = User.objects.get(user=data["user"]) 
 
 			if check_password(data["password"], authorized_user.password):
-				return Response([{"msg": "Usuário altenticado"}], status=status.HTTP_200_OK)
+				return Response([{"msg": "Usuário autenticado"}], status=status.HTTP_200_OK)
 			else:
 				return Response([{'msg': 'Usuario ou senha incorretos'}], status=status.HTTP_401_UNAUTHORIZED)
 
