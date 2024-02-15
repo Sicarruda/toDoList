@@ -27,5 +27,5 @@ urlpatterns = [
     path('task/add-task/', TaskViews.as_view()), #POST
     path('task/', TaskViews.as_view()), #GET 
     path('task/edit/', TaskViews.as_view()), #PUT
-    path('login/', loginView.as_view()), #POST
+    path('login/', LoginView.as_view()), #POST
 ]

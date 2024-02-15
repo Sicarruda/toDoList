@@ -183,7 +183,7 @@ class TaskViews(APIView):
 			return Response([{'msg': 'Erro ao salvar alterações'}], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class loginView(APIView):
+class LoginView(APIView):
 	def post(self, request):
 		"""
 			Login do usuário:
