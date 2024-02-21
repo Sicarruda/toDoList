@@ -1,5 +1,6 @@
 import logging
 
+from datetime import datetime
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
@@ -167,6 +168,7 @@ class TaskViews(APIView):
 
 			if data["is_complete"]:
 				task.is_complete = data["is_complete"]
+				task.finish_date = datetime.now()
 			
 			if data["task"]:
 				task.task = data["task"]
