@@ -9,8 +9,8 @@ from .models import (
 
 class Users(admin.ModelAdmin):
     list_display = ("id", "user", "email", "password", "deleted")
-    list_filter = ("id", "user")
-    list_display_links = ("id", "user")
+    list_filter = ("id", "user", "email")
+    list_display_links = ("id", "user", "email")
     search_fields = ("user",)
     list_per_page = 20
 
